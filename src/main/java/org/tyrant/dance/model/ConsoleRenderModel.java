@@ -1,10 +1,10 @@
-package org.tyrant.dance.modal;
+package org.tyrant.dance.model;
 
 import org.fusesource.jansi.Ansi;
 import org.tyrant.dance.data.ColorChar;
 import org.tyrant.dance.data.Frame;
 
-public class ConsoleRenderModal {
+public class ConsoleRenderModel {
 	private static Character EMPTY_CHAR = ' ';
 	
 	/**

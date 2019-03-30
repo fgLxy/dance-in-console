@@ -9,7 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.tyrant.dance.data.Frame;
-import org.tyrant.dance.modal.ConsoleRenderModal;
+import org.tyrant.dance.model.ConsoleRenderModel;
 
 /**
  * 负责播放帧序列
@@ -29,7 +29,7 @@ public class Player {
 				return;
 			}
 			queue.poll();
-			ConsoleRenderModal.render(curFrame);
+			ConsoleRenderModel.render(curFrame);
 			if (queue.isEmpty()) {
 				service.shutdown();
 			}
