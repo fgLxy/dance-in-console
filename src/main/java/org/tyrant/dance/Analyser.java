@@ -16,6 +16,7 @@ import org.tyrant.dance.data.Config;
 import org.tyrant.dance.data.ImageResource;
 import org.tyrant.dance.data.Resource;
 import org.tyrant.dance.data.StringResource;
+import org.tyrant.dance.data.VideoResource;
 import org.tyrant.dance.utils.ColorUtils;
 
 /**
@@ -38,9 +39,9 @@ public class Analyser {
 				Element elem = (Element) iter.next();
 				String type = elem.getName();
 				switch(type) {
-				case "string": config.addResource(analyzeString(elem));break;
-				case "image": config.addResource(analyzeImage(elem));break;
-				case "video": config.addResource(analyzeVideo(elem));break;
+				case "string": config.addResource(analyzeString(config, elem));break;
+				case "image": config.addResource(analyzeImage(config, elem));break;
+				case "video": config.addResource(analyzeVideo(config, elem));break;
 				default: throw new RuntimeException("unknow resource type." + type);
 				}
 			}
@@ -58,23 +59,23 @@ public class Analyser {
 		return attr.getValue();
 	}
 	
-	private static Resource analyzeVideo(Element elem) {
+	private static Resource analyzeVideo(Config config, Element elem) {
 		String path = getAttribute(elem, "path");
-		ImageResource resource = new ImageResource(path);
+		VideoResource resource = new VideoResource(config, path);
 		long timeOffset = Long.valueOf(getAttribute(elem, "timeOffset"));
 		resource.setStartTimeOffset(timeOffset);
 		return resource;
 	}
 
-	private static Resource analyzeImage(Element elem) {
+	private static Resource analyzeImage(Config config, Element elem) {
 		String path = getAttribute(elem, "path");
-		ImageResource resource = new ImageResource(path);
+		ImageResource resource = new ImageResource(config, path);
 		long timeOffset = Long.valueOf(getAttribute(elem, "timeOffset"));
 		resource.setStartTimeOffset(timeOffset);
 		return resource;
 	}
 
-	private static Resource analyzeString(Element elem) {
+	private static Resource analyzeString(Config config, Element elem) {
 		ColorChar[][] datas = new ColorChar[elem.elements().size()][];
 		for (int lineIdx = 0; lineIdx < elem.elements().size(); lineIdx++) {
 			Element line = (Element) elem.elements().get(lineIdx);
@@ -90,7 +91,7 @@ public class Analyser {
 			}
 			datas[lineIdx] = chars.toArray(new ColorChar[chars.size()]);
 		}
-		StringResource resource = new StringResource(datas);
+		StringResource resource = new StringResource(config, datas);
 		long timeOffset = Long.valueOf(getAttribute(elem, "timeOffset"));
 		resource.setStartTimeOffset(timeOffset);
 		return resource;

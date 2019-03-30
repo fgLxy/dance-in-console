@@ -1,4 +1,4 @@
-<config width="150" height="60">
+<config width="200" height="60">
 	<string timeOffset="0">
 		<line>
 			<sequence color="yellow">hello,</sequence>
@@ -49,4 +49,6 @@
 			</sequence>
 		</line>
 	</string>
+	<video timeOffset="3000" path="lz.rm">
+	</video>
 </config>

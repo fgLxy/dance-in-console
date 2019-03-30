@@ -8,4 +8,6 @@ public interface Resource {
 	void setStartTimeOffset(long timeOffset);
 	
 	long getStartTimeOffset();
+	
+	Frame nextFrame();
 }

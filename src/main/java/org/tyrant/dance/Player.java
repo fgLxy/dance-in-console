@@ -9,6 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.tyrant.dance.data.Frame;
+import org.tyrant.dance.data.Resource;
 import org.tyrant.dance.model.ConsoleRenderModel;
 
 /**
@@ -18,34 +19,65 @@ import org.tyrant.dance.model.ConsoleRenderModel;
  */
 public class Player {
 	
-	private Queue<Frame> queue;
+	private Queue<Resource> queue;
 	private long startTimestamp;
 	Runnable player = new Runnable() {
+		Resource curResource;
 		@Override
 		public void run() {
-			Frame curFrame = queue.peek();
+			Frame frame = null;
+			if (curResource == null) {
+				frame = switchNextResourceAndGetFrame();
+			} else {
+				frame = curResource.nextFrame();
+				if (frame == null) {
+					frame = switchNextResourceAndGetFrame();
+				}
+			}
+			if (frame != null) {
+				ConsoleRenderModel.render(frame);
+			}
+			else {
+				if (queue.isEmpty()) {
+					service.shutdown();
+				}
+			}
+		}
+		private Frame switchNextResourceAndGetFrame() {
+			curResource = nextResource();
+			if (curResource == null) {
+				return null;
+			}
+			Frame frame = curResource.nextFrame();
+			if (frame == null) {
+				curResource = null;
+				return null;
+			}
+			return frame;
+		}
+		private Resource nextResource() {
+			if (queue.isEmpty()) {
+				return null;
+			}
+			Resource resource = queue.peek();
 			long curTimestamp = System.currentTimeMillis();
-			if (curTimestamp - startTimestamp < curFrame.getTimeOffset()) {
-				return;
+			if (curTimestamp - startTimestamp < resource.getStartTimeOffset()) {
+				return null;
 			}
 			queue.poll();
-			ConsoleRenderModel.render(curFrame);
-			if (queue.isEmpty()) {
-				service.shutdown();
-			}
+			return resource;
 		}
 	};
 	ScheduledExecutorService service;
-	public Player(List<Frame> frames) {
-		this.queue = new PriorityBlockingQueue<>(1000, new Comparator<Frame>() {
-
+	public Player(List<Resource> resources) {
+		this.queue = new PriorityBlockingQueue<>(1000, new Comparator<Resource>() {
 			@Override
-			public int compare(Frame o1, Frame o2) {
-				return Long.compare(o1.getTimeOffset(), o2.getTimeOffset());
+			public int compare(Resource o1, Resource o2) {
+				return Long.compare(o1.getStartTimeOffset(), o2.getStartTimeOffset());
 			}
 
 		});
-		this.queue.addAll(frames);
+		this.queue.addAll(resources);
 		this.service = Executors.newScheduledThreadPool(1);
 	}
 	
