@@ -1,0 +1,52 @@
+<config width="150" height="60">
+	<string timeOffset="0">
+		<line>
+			<sequence color="yellow">hello,</sequence>
+			<sequence color="blue">world</sequence>
+		</line>
+	</string>
+	<image timeOffset="1000" path="hl.jpg">
+	</image>
+	<string timeOffset="2000">
+		<line>
+			<sequence color="red">
+				Thank you for comforting me when I'm sad 
+			</sequence>
+		</line>
+		<line>
+			<sequence color="green">
+				Loving me when I'm mad 
+			</sequence>
+		</line>
+		<line>
+			<sequence color="yellow">
+				Picking me up when I'm down 
+			</sequence>
+		</line>
+		<line>
+			<sequence color="blue">
+				Thank you for being my friend and being around 
+			</sequence>
+		</line>
+		<line>
+			<sequence color="magenta">
+				Teaching me the meaning of love 
+			</sequence>
+		</line>
+		<line>
+			<sequence color="cyan">
+				Encouraging me when I need a shove 
+			</sequence>
+		</line>
+		<line>
+			<sequence color="white">
+				But most of all thank you for 
+			</sequence>
+		</line>
+		<line>
+			<sequence color="red">
+				Loving me for who I am 
+			</sequence>
+		</line>
+	</string>
+</config>
